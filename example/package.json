@@ -1,0 +1,20 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo index.js"
+  },
+  "keywords": [],
+  "author": "Remi Nyborg <remi@nyborg.priv.no>",
+  "license": "MIT",
+  "devDependencies": {
+    "bankai": "^3.2.0"
+  },
+  "dependencies": {
+    "lorem-ipsum": "^1.0.3",
+    "random-int": "^1.0.0",
+    "yo-yo": "^1.2.2"
+  }
+}

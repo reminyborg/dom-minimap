@@ -1,0 +1,35 @@
+{
+  "name": "dom-minimap",
+  "version": "1.0.0",
+  "description": "simply lovely dom minimap",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reminyborg/dom-minimap.git"
+  },
+  "keywords": [
+    "dom",
+    "minimap",
+    "lovely",
+    "simple"
+  ],
+  "author": "Remi Nyborg <remi@nyborg.priv.no>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/reminyborg/dom-minimap/issues"
+  },
+  "homepage": "https://github.com/reminyborg/dom-minimap#readme",
+  "devDependencies": {
+    "standard": "^8.0.0"
+  },
+  "dependencies": {
+    "element-resize-event": "^2.0.5",
+    "yo-yo": "^1.2.2"
+  }
+}
