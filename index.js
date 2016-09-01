@@ -2,7 +2,7 @@ const yo = require('yo-yo')
 const onload = require('on-load')
 const nanoraf = require('nanoraf')
 const insertCss = require('insert-css')
-// const resizeEvent = require('element-resize-event')
+const resizeEvent = require('element-resize-detector')({ strategy: 'scroll' })
 
 insertCss(`
   .dom-minimap-section {
@@ -13,17 +13,13 @@ insertCss(`
     font-size: 11px;
     padding-left: 2px;
     border-radius: 2px;
-
-  }
-
-  .unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    cursor: default;
+    cursor: pointer;
   }
 
   .dom-minimap-section:hover {
@@ -48,6 +44,7 @@ function minimap (opts) {
   opts.container = opts.container || 'minimap-content'
   opts.position = opts.position !== false // default true
   
+  var lastContainerHeight
   var container
   var element = document.createElement('div')
   element.style.flex = '1'
@@ -69,7 +66,13 @@ function minimap (opts) {
     state = newState
   }
 
-  return element
+  return function () {
+    if (container && lastContainerHeight !== container.scrollHeight) {
+      update({ sections: getSections(container, opts) })
+    }
+
+    return element
+  }
 }
 
 function renderMap (element, state) {
