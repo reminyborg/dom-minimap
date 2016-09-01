@@ -35,31 +35,31 @@ function minimap (opts) {
     var sectionName = opts.sections
     opts.sections = (container) => Array.prototype.slice.call(container.getElementsByClassName(sectionName))
   }
-  opts.title = opts.title || 'data-minimap-title'
+  opts.title = opts.title || 'data-section-title'
   if (typeof opts.title !== 'function') {
-    var titleName = opts.title 
+    var titleName = opts.title
     opts.title = (section) => section.getAttribute(titleName)
   }
   opts.container = opts.container || 'minimap-content'
   opts.position = opts.position !== false // default true
-  
+
   var lastContainerHeight
   var container
   var element = document.createElement('div')
   element.style.flex = '1'
 
   const render = nanoraf(renderMap.bind(null, element))
-  var state = { opts: opts } 
+  var state = { opts: opts }
 
   onload(element, function load () {
-    container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container 
+    container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container
     lastContainerHeight = container.scrollHeight
     container.addEventListener('scroll', function containerScroll () {
       update({ scroll: getScroll(container) })
     })
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
-  
+
   function update (partialState) {
     var newState = Object.assign({}, state, partialState)
     render(newState, state)
@@ -68,11 +68,11 @@ function minimap (opts) {
 
   return function () {
     if (container) {
-      setTimeout(function () { 
+      setTimeout(function () {
         if (lastContainerHeight !== container.scrollHeight) {
           update({ sections: getSections(container, opts) })
         }
-      },1)
+      }, 1)
     }
 
     return element
@@ -80,7 +80,7 @@ function minimap (opts) {
 }
 
 function renderMap (element, state) {
-  content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
+  var content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
   if (state.sections) {
     content = state.sections.map((section) => {
       return yo`
@@ -99,7 +99,7 @@ function getScroll (container) {
   var top = container.scrollTop
   var cHeight = container.clientHeight
   var height = container.scrollHeight
-  
+
   return {
     topFromBottom: ((height - top) / height * 100) + '%',
     bottomFromTop: ((1 - ((height - top - cHeight) / height)) * 100) + '%'
@@ -113,7 +113,7 @@ function getSections (container, opts) {
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
     return {
-      scrollTo: ()=>{ container.scrollTop = bounds.top; console.log(bounds.top) },
+      scrollTo: () => { container.scrollTop = bounds.top; console.log(bounds.top) },
       top: (((bounds.top - cBounds.top) / cHeight) * 100) + '%',
       bottom: applyPadding(((1 - (bounds.bottom - cBounds.top) / cHeight) * 100) + '%', opts.paddingBottom),
       title: opts.title(section)
@@ -122,6 +122,6 @@ function getSections (container, opts) {
 }
 
 function applyPadding (value, padding) {
-    if (!padding) return value
-    return `calc(${value} + ${padding})`
+  if (!padding) return value
+  return `calc(${value} + ${padding})`
 }

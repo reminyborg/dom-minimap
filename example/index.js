@@ -9,12 +9,12 @@ const width = 90
 var el = view()
 
 function view () {
-  var content = Array.from(Array(16).keys()).map((index) => lorem({ units: 'paragraphs', suffix: ':', count: randomInt(3, 30) }).split('::')) 
+  var content = Array.from(Array(16).keys()).map((index) => lorem({ units: 'paragraphs', suffix: ':', count: randomInt(3, 30) }).split('::'))
   return yo`
     <div>
       <main id="minimap-content" style="position:absolute;top:0;left:0;width:calc(100% - ${width}px);height:100%;overflow-y:scroll">
         <button onclick=${update}>randomize!</button>
-        ${content.map((con, index) => yo`<dl class="minimap-section" data-minimap-title="${index}" style="background-color:lightgrey;margin:30px;padding:20px;"><dt>${index}</dt><dd>${con.map((c) =>yo`<p>${c}</p>`)}</dd></dl>`)}
+        ${content.map((con, index) => yo`<dl class="minimap-section" data-section-title="${index}" style="background-color:lightgrey;margin:30px;padding:20px;"><dt>${index}</dt><dd>${con.map((c) => yo`<p>${c}</p>`)}</dd></dl>`)}
       </main>
       <aside style="position:absolute;top:0;left:calc(100% - ${width}px);right:0;height:100%;border-left: solid 1px grey">
         ${map()}
