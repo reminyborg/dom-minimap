@@ -54,6 +54,7 @@ function minimap (opts) {
 
   onload(element, function load () {
     container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container 
+    lastContainerHeight = container.scrollHeight
     container.addEventListener('scroll', function containerScroll () {
       update({ scroll: getScroll(container) })
     })
@@ -67,8 +68,12 @@ function minimap (opts) {
   }
 
   return function () {
-    if (container && lastContainerHeight !== container.scrollHeight) {
-      update({ sections: getSections(container, opts) })
+    if (container) {
+      setTimeout(function () { 
+        if (lastContainerHeight !== container.scrollHeight) {
+          update({ sections: getSections(container, opts) })
+        }
+      },1)
     }
 
     return element
@@ -105,10 +110,11 @@ function getScroll (container) {
 function getSections (container, opts) {
   var cHeight = container.scrollHeight
   var cBounds = container.getBoundingClientRect()
+  console.log(cHeight)
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
     return {
-      scrollTo: ()=>{ container.scrollTop = bounds.top },
+      scrollTo: ()=>{ container.scrollTop = bounds.top; console.log(bounds.top) },
       top: (((bounds.top - cBounds.top) / cHeight) * 100) + '%',
       bottom: applyPadding(((1 - (bounds.bottom - cBounds.top) / cHeight) * 100) + '%', opts.paddingBottom),
       title: opts.title(section)
