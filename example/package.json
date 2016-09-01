@@ -13,6 +13,7 @@
     "bankai": "^3.2.0"
   },
   "dependencies": {
+    "budo": "^9.0.0",
     "lorem-ipsum": "^1.0.3",
     "random-int": "^1.0.0",
     "yo-yo": "^1.2.2"

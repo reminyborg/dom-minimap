@@ -1,6 +1,6 @@
 {
   "name": "dom-minimap",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "simply lovely dom minimap",
   "main": "index.js",
   "directories": {
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "element-resize-event": "^2.0.5",
+    "nanoraf": "^2.1.1",
     "yo-yo": "^1.2.2"
   }
 }
