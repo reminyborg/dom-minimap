@@ -1,7 +1,35 @@
 const yo = require('yo-yo')
 const onload = require('on-load')
 const nanoraf = require('nanoraf')
+const insertCss = require('insert-css')
 // const resizeEvent = require('element-resize-event')
+
+insertCss(`
+  .dom-minimap-section {
+    position: absolute;
+    background-color: lightgrey;
+    overflow: hidden;
+    color: grey;
+    font-size: 11px;
+    padding-left: 2px;
+    border-radius: 2px;
+
+  }
+
+  .unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+  }
+
+  .dom-minimap-section:hover {
+    background-color: #e6e6e6;
+  } 
+`)
 
 module.exports = minimap
 
@@ -18,16 +46,21 @@ function minimap (opts) {
     opts.title = (section) => section.getAttribute(titleName)
   }
   opts.container = opts.container || 'minimap-content'
+  opts.position = opts.position !== false // default true
   
+  var container
   var element = document.createElement('div')
   element.style.flex = '1'
 
-  const render = nanoraf(renderMap)
-  var state = { element: element, opts: opts } 
+  const render = nanoraf(renderMap.bind(null, element))
+  var state = { opts: opts } 
 
-  onload(element, () => {
-    state.container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container
-    update({ container: state.container })
+  onload(element, function load () {
+    container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container 
+    container.addEventListener('scroll', function containerScroll () {
+      update({ scroll: getScroll(container) })
+    })
+    update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
   
   function update (partialState) {
@@ -39,25 +72,40 @@ function minimap (opts) {
   return element
 }
 
-function renderMap (state) {
+function renderMap (element, state) {
   content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
-  if (state.container) {
-    content = sections(state).map((section) => {
-      return yo`<div style="position:absolute;background-color:lightgrey;top:${section.top};bottom:${section.bottom};left:5px;right:5px;overflow:hidden;color:grey;font-size:11px;padding-left:2px;border-radius:2px">${section.title}</div>`
-    })
+  if (state.sections) {
+    content = state.sections.map((section) => {
+      return yo`
+        <div class="dom-minimap-section unselectable" onclick=${section.scrollTo} style="top:${section.top};bottom:${section.bottom};left:5px;right:5px;">${section.title}</div>
+      `
+    }).concat([
+      yo`<div style="pointer-events:none;position:absolute;background-color:rgba(0,0,0,0.15);top:0;left:0;right:0;bottom:${state.scroll.topFromBottom}"></div>`,
+      yo`<div style="pointer-events:none;position:absolute;background-color:rgba(0,0,0,0.15);bottom:0;left:0;right:0;top:${state.scroll.bottomFromTop}"></div>`
+    ])
   }
 
-  yo.update(state.element, yo`<div style='position:relative;height:100%'>${content}</div>`)
+  yo.update(element, yo`<div style='position:relative;height:100%'>${content}</div>`)
 }
 
-function sections (state) {
-  var container = state.container
-  var opts = state.opts
+function getScroll (container) {
+  var top = container.scrollTop
+  var cHeight = container.clientHeight
+  var height = container.scrollHeight
+  
+  return {
+    topFromBottom: ((height - top) / height * 100) + '%',
+    bottomFromTop: ((1 - ((height - top - cHeight) / height)) * 100) + '%'
+  }
+}
+
+function getSections (container, opts) {
   var cHeight = container.scrollHeight
   var cBounds = container.getBoundingClientRect()
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
     return {
+      scrollTo: ()=>{ container.scrollTop = bounds.top },
       top: (((bounds.top - cBounds.top) / cHeight) * 100) + '%',
       bottom: applyPadding(((1 - (bounds.bottom - cBounds.top) / cHeight) * 100) + '%', opts.paddingBottom),
       title: opts.title(section)
