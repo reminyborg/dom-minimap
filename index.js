@@ -2,7 +2,6 @@ const yo = require('yo-yo')
 const onload = require('on-load')
 const nanoraf = require('nanoraf')
 const insertCss = require('insert-css')
-const resizeEvent = require('element-resize-detector')({ strategy: 'scroll' })
 
 insertCss(`
   .dom-minimap-section {
