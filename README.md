@@ -1,7 +1,11 @@
 # dom-minimap 
 Simply lovely dom minimap
 
-Vertical only for now. Use when you have looong pages and want an intuitive way to see where you are and navigate around.
+**Vertical only** (for now)
+
+Use when you have looong pages and want an intuitive way to see where you are and navigate around.
+
+![alt tag](https://raw.githubusercontent.com/reminyborg/dom-minimap/master/dom-minimap.gif)
 
 ## Demo
 - :steam_locomotive: [example with yo-yo/choo](http://requirebin.com/?gist=5fb5398f612a208b4ca4854183c5c2d2)
