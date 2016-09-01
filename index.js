@@ -40,7 +40,7 @@ function minimap (opts) {
     var titleName = opts.title
     opts.title = (section) => section.getAttribute(titleName)
   }
-  opts.container = opts.container || 'minimap-content'
+  opts.content = opts.content || 'minimap-content'
   opts.position = opts.position !== false // default true
 
   var lastContainerHeight
@@ -52,7 +52,7 @@ function minimap (opts) {
   var state = { opts: opts }
 
   onload(element, function load () {
-    container = typeof opts.container === 'string' ? document.getElementById(opts.container) : opts.container
+    container = typeof opts.content === 'string' ? document.getElementById(opts.content) : opts.content
     lastContainerHeight = container.scrollHeight
     container.addEventListener('scroll', function containerScroll () {
       update({ scroll: getScroll(container) })
