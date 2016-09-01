@@ -31,6 +31,7 @@
   "dependencies": {
     "element-resize-event": "^2.0.5",
     "nanoraf": "^2.1.1",
+    "on-load": "^3.2.0",
     "yo-yo": "^1.2.2"
   }
 }
