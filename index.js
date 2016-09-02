@@ -109,7 +109,6 @@ function getScroll (container) {
 function getSections (container, opts) {
   var cHeight = container.scrollHeight
   var cBounds = container.getBoundingClientRect()
-  console.log(cHeight)
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
     return {
