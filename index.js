@@ -112,7 +112,7 @@ function getSections (container, opts) {
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
     return {
-      scrollTo: () => { container.scrollTop = bounds.top; console.log(bounds.top) },
+      scrollTo: () => { container.scrollTop = bounds.top },
       top: (((bounds.top - cBounds.top) / cHeight) * 100) + '%',
       bottom: applyPadding(((1 - (bounds.bottom - cBounds.top) / cHeight) * 100) + '%', opts.paddingBottom),
       title: opts.title(section)
