@@ -36,7 +36,7 @@ function minimap (opts) {
     var sectionName = opts.sections
     opts.sections = (container) => Array.prototype.slice.call(container.getElementsByClassName(sectionName))
   }
-  opts.scrollThrottle = function (func) { func() }
+  opts.scrollThrottle = 0
   opts.title = opts.title || 'data-section-title'
   if (typeof opts.title !== 'function') {
     var titleName = opts.title
@@ -58,7 +58,7 @@ function minimap (opts) {
     lastContainerHeight = container.scrollHeight
     container.addEventListener('scroll', throttle(function containerScroll () {
       update({ scroll: getScroll(container) })
-    }, 16))
+    }, opts.scrollThrottle))
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
 
