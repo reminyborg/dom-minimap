@@ -2,6 +2,7 @@ const yo = require('yo-yo')
 const onload = require('on-load')
 const nanoraf = require('nanoraf')
 const insertCss = require('insert-css')
+const throttle = require('lodash.throttle')
 
 insertCss(`
   .dom-minimap-section {
@@ -35,6 +36,7 @@ function minimap (opts) {
     var sectionName = opts.sections
     opts.sections = (container) => Array.prototype.slice.call(container.getElementsByClassName(sectionName))
   }
+  opts.scrollThrottle = function (func) { func() }
   opts.title = opts.title || 'data-section-title'
   if (typeof opts.title !== 'function') {
     var titleName = opts.title
@@ -54,9 +56,9 @@ function minimap (opts) {
   onload(element, function load () {
     container = typeof opts.content === 'string' ? document.getElementById(opts.content) : opts.content
     lastContainerHeight = container.scrollHeight
-    container.addEventListener('scroll', function containerScroll () {
+    container.addEventListener('scroll', throttle(function containerScroll () {
       update({ scroll: getScroll(container) })
-    })
+    }, 16))
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
 

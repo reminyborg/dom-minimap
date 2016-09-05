@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "insert-css": "^1.0.0",
+    "lodash.throttle": "^4.1.1",
     "nanoraf": "^2.1.1",
     "on-load": "^3.2.0",
     "yo-yo": "^1.2.2"
