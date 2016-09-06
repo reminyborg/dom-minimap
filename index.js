@@ -24,7 +24,14 @@ insertCss(`
 
   .dom-minimap-section:hover {
     background-color: #e6e6e6;
-  } 
+  }
+
+  .dom-minimap-scroll {
+    pointer-events: none;
+    position: absolute;
+    background-color: rgba(0,0,0,0.15);
+    top: 0; left: 0; right: 0; bottom: 0;
+  }
 `)
 
 module.exports = minimap
@@ -89,8 +96,8 @@ function renderMap (element, state) {
         <div class="dom-minimap-section unselectable" onclick=${section.scrollTo} style="top:${section.top};bottom:${section.bottom};left:5px;right:5px;">${section.title}</div>
       `
     }).concat([
-      yo`<div style="pointer-events:none;position:absolute;background-color:rgba(0,0,0,0.15);top:0;left:0;right:0;bottom:${state.scroll.topFromBottom}"></div>`,
-      yo`<div style="pointer-events:none;position:absolute;background-color:rgba(0,0,0,0.15);bottom:0;left:0;right:0;top:${state.scroll.bottomFromTop}"></div>`
+      yo`<div class="dom-minimap-scroll" style="bottom:${state.scroll.topFromBottom}"></div>`,
+      yo`<div class="dom-minimap-scroll" style="top:${state.scroll.bottomFromTop}"></div>`
     ])
   }
 
