@@ -1,4 +1,6 @@
 # dom-minimap 
+[![npm version][2]][3] [![downloads][8]][9] [![js-standard-style][10]][11]
+
 Simply lovely dom minimap
 
 **Vertical only** (for now)
@@ -45,3 +47,10 @@ minimap()
   paddingBottom: 0 // because sometimes you need more then 0.0001 px between sections, put <value>px or <value>%
 }
 ```
+
+[2]: https://img.shields.io/npm/v/dom-minimap.svg?style=flat-square
+[3]: https://npmjs.org/package/dom-minimap
+[8]: http://img.shields.io/npm/dm/dom-minimap.svg?style=flat-square
+[9]: https://npmjs.org/package/dom-minimap
+[10]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
+[11]: https://github.com/feross/standard
