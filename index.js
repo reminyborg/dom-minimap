@@ -2,7 +2,7 @@ const yo = require('yo-yo')
 const onload = require('on-load')
 const nanoraf = require('nanoraf')
 const insertCss = require('insert-css')
-const throttle = require('lodash.throttle')
+const debounce = require('lodash.debounce')
 
 insertCss(`
   .dom-minimap-section {
@@ -20,6 +20,7 @@ insertCss(`
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    left: 5px; right: 5px;
   }
 
   .dom-minimap-section:hover {
@@ -57,15 +58,21 @@ function minimap (opts) {
   var element = document.createElement('div')
   element.style.flex = '1'
 
-  const render = nanoraf(renderMap.bind(null, element))
+  const render = nanoraf(renderMap)
   var state = { opts: opts }
 
   onload(element, function load () {
     container = typeof opts.content === 'string' ? document.getElementById(opts.content) : opts.content
     lastContainerHeight = container.scrollHeight
-    container.addEventListener('scroll', throttle(function containerScroll () {
+    // update on scroll event
+    container.addEventListener('scroll', debounce(function containerScroll () {
       update({ scroll: getScroll(container) })
-    }, opts.scrollThrottle))
+    }, opts.scrollThrottle, { maxWait: opts.scrollThrottle }))
+    // update on window resize event
+    window.addEventListener('resize', debounce(function windowResize () {
+      update({ sections: getSections(container, opts), scroll: getScroll(container) })
+    }),100)
+    // update on element loaded
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
 
@@ -86,22 +93,26 @@ function minimap (opts) {
 
     return element
   }
-}
-
-function renderMap (element, state) {
-  var content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
-  if (state.sections) {
-    content = state.sections.map((section) => {
-      return yo`
-        <div class="dom-minimap-section unselectable" onclick=${section.scrollTo} style="top:${section.top};bottom:${section.bottom};left:5px;right:5px;">${section.title}</div>
-      `
-    }).concat([
-      yo`<div class="dom-minimap-scroll" style="bottom:${state.scroll.topFromBottom}"></div>`,
-      yo`<div class="dom-minimap-scroll" style="top:${state.scroll.bottomFromTop}"></div>`
-    ])
+  
+  function scrollTo () {
+    var top = this.style.top.slice(0, -1)
+    if (top) container.scrollTop = container.scrollHeight * top / 100
   }
-
-  yo.update(element, yo`<div style='position:relative;height:100%'>${content}</div>`)
+  
+  function renderMap (state) {
+    var content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
+    if (state.sections) {
+      content = state.sections.map((section) => {
+        return yo`
+          <div class="dom-minimap-section unselectable" onclick=${scrollTo} style="top:${section.top};bottom:${section.bottom}">${section.title}</div>
+        `
+      }).concat([
+        yo`<div class="dom-minimap-scroll" style="bottom:${state.scroll.topFromBottom}"></div>`,
+        yo`<div class="dom-minimap-scroll" style="top:${state.scroll.bottomFromTop}"></div>`
+      ])
+    }
+    yo.update(element, yo`<div style='position:relative;height:100%'>${content}</div>`)
+  }
 }
 
 function getScroll (container) {
@@ -120,10 +131,12 @@ function getSections (container, opts) {
   var cBounds = container.getBoundingClientRect()
   return opts.sections(container).map((section) => {
     var bounds = section.getBoundingClientRect()
+    var top = (((bounds.top - cBounds.top + container.scrollTop) / cHeight) * 100) + '%'
+    var bottom = ((1 - (bounds.bottom - cBounds.top + container.scrollTop) / cHeight) * 100) + '%'
     return {
-      scrollTo: () => { container.scrollTop = bounds.top },
-      top: (((bounds.top - cBounds.top + container.scrollTop) / cHeight) * 100) + '%',
-      bottom: applyPadding(((1 - (bounds.bottom - cBounds.top + container.scrollTop) / cHeight) * 100) + '%', opts.paddingBottom),
+      scrollTo,
+      top: top,
+      bottom: applyPadding(bottom, opts.paddingBottom),
       title: opts.title(section)
     }
   })
