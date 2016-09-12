@@ -10,8 +10,9 @@ Use when you have looong pages and want an intuitive way to see where you are an
 ![alt tag](https://raw.githubusercontent.com/reminyborg/dom-minimap/master/dom-minimap.gif)
 
 ## Demo
-- :steam_locomotive: [example with yo-yo/choo](http://requirebin.com/?gist=5fb5398f612a208b4ca4854183c5c2d2)
-- :high_brightness: [example with React](http://requirebin.com/?gist=d1f74fd4942dc1ffa0c91b54809a3f0e)
+:steam_locomotive: [example with yo-yo/choo](http://requirebin.com/?gist=5fb5398f612a208b4ca4854183c5c2d2)
+
+:high_brightness: [example with React](http://requirebin.com/?gist=d1f74fd4942dc1ffa0c91b54809a3f0e)
 
 ## Usage
 You can easily add minimap to existing dom structures, by hooking on to existing id, classes or adding your own.
