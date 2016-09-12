@@ -76,6 +76,10 @@ function minimap (opts) {
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
   })
 
+  element.addEventListener('wheel', function (event) {
+    if (container) container.scrollTop = container.scrollTop + event.deltaY
+  })
+
   function update (partialState) {
     var newState = Object.assign({}, state, partialState)
     render(newState, state)
