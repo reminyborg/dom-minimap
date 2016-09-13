@@ -1,5 +1,5 @@
 # dom-minimap 
-[![npm version][2]][3] [![downloads][8]][9] [![js-standard-style][10]][11]
+[![npm version][2]][3] [![downloads][8]][9] [![js-standard-style][10]][11] [![ecoonline](http://img.shields.io/badge/Development%20sponsored%20by-ecoonline-green.svg?style=flat-square)](http://ecoonline.no/)
 
 Simply lovely dom minimap
 
