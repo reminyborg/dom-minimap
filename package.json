@@ -7,6 +7,7 @@
     "example": "example"
   },
   "scripts": {
+    "start": "budo example/index.js --live",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +27,7 @@
   },
   "homepage": "https://github.com/reminyborg/dom-minimap#readme",
   "devDependencies": {
+    "budo": "^9.1.0",
     "standard": "^8.0.0"
   },
   "dependencies": {
