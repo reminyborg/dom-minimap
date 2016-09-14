@@ -72,10 +72,7 @@ sections:
 the scroll 'hidden' overlay:
 ```css
 .dom-minimap-scroll {
-  pointer-events: none;
-  position: absolute;
   background-color: rgba(0,0,0,0.15);
-  top: 0; left: 0; right: 0; bottom: 0;
 }
 ```
 
