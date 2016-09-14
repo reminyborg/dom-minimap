@@ -74,7 +74,7 @@ function minimap (opts) {
     }),100)
     // update on element loaded
     update({ sections: getSections(container, opts), scroll: getScroll(container) })
-  })
+  }, null, minimap)
 
   element.addEventListener('wheel', function (event) {
     if (container) container.scrollTop = container.scrollTop + event.deltaY
