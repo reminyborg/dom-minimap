@@ -49,6 +49,36 @@ minimap()
 }
 ```
 
+## Styling
+
+If you want to style the minimap, you can override some of the default styles.
+The styles are added first in head so adding this to any of your css files should overwrite the styles.
+
+sections:
+```css
+.dom-minimap-section {
+    background-color: lightgrey;
+    color: grey;
+    font-size: 11px;
+    padding-left: 2px;
+    border-radius: 2px;
+    left: 5px; right: 5px;
+}
+.dom-minimap-section:hover {
+  background-color: #e6e6e6;
+}
+```
+
+the scroll 'hidden' overlay:
+```css
+.dom-minimap-scroll {
+  pointer-events: none;
+  position: absolute;
+  background-color: rgba(0,0,0,0.15);
+  top: 0; left: 0; right: 0; bottom: 0;
+}
+```
+
 [2]: https://img.shields.io/npm/v/dom-minimap.svg?style=flat-square
 [3]: https://npmjs.org/package/dom-minimap
 [8]: http://img.shields.io/npm/dm/dom-minimap.svg?style=flat-square
