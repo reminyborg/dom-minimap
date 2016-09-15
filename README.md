@@ -1,5 +1,5 @@
 # dom-minimap 
-[![npm version][2]][3] [![downloads][8]][9] [![js-standard-style][10]][11] [![ecoonline](http://img.shields.io/badge/Development%20sponsored%20by-ecoonline-green.svg?style=flat-square)](http://ecoonline.no/)
+[![npm version][2]][3] [![downloads][8]][9] [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/) [![ecoonline](http://img.shields.io/badge/development%20sponsored%20by-ecoonline-green.svg?style=flat-square)](http://ecoonline.no/)
 
 Simply lovely dom minimap
 
@@ -80,5 +80,3 @@ the scroll 'hidden' overlay:
 [3]: https://npmjs.org/package/dom-minimap
 [8]: http://img.shields.io/npm/dm/dom-minimap.svg?style=flat-square
 [9]: https://npmjs.org/package/dom-minimap
-[10]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
-[11]: https://github.com/feross/standard
