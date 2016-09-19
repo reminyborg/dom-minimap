@@ -44,14 +44,13 @@ function minimap (opts) {
     var sectionName = opts.sections
     opts.sections = (container) => Array.prototype.slice.call(container.getElementsByClassName(sectionName))
   }
-  opts.scrollThrottle = 0
+  opts.scrollThrottle = 6
   opts.title = opts.title || 'data-section-title'
   if (typeof opts.title !== 'function') {
     var titleName = opts.title
     opts.title = (section) => section.getAttribute(titleName)
   }
   opts.content = opts.content || 'minimap-content'
-  opts.position = opts.position !== false // default true
 
   var lastContainerHeight
   var container
@@ -65,23 +64,22 @@ function minimap (opts) {
     container = typeof opts.content === 'string' ? document.getElementById(opts.content) : opts.content
     lastContainerHeight = container.scrollHeight
     // update on scroll event
-    container.addEventListener('scroll', debounce(function containerScroll () {
-      update({ scroll: getScroll(container) })
-    }, opts.scrollThrottle, { maxWait: opts.scrollThrottle }))
+    container.addEventListener('scroll', debounce(update, opts.scrollThrottle, { maxWait: opts.scrollThrottle }))
     // update on window resize event
-    window.addEventListener('resize', debounce(function windowResize () {
-      update({ sections: getSections(container, opts), scroll: getScroll(container) })
-    }),100)
+    window.addEventListener('resize', debounce(update),100)
     // update on element loaded
-    update({ sections: getSections(container, opts), scroll: getScroll(container) })
+    update()
   }, null, minimap)
 
   element.addEventListener('wheel', function (event) {
     if (container) container.scrollTop = container.scrollTop + event.deltaY
   })
 
-  function update (partialState) {
-    var newState = Object.assign({}, state, partialState)
+  function update () {
+    var newState = Object.assign({}, state, { 
+        sections: getSections(container, element, opts),
+        scroll: getScroll(container)
+    })
     render(newState, state)
     state = newState
   }
@@ -90,7 +88,7 @@ function minimap (opts) {
     if (container) {
       setTimeout(function () {
         if (lastContainerHeight !== container.scrollHeight) {
-          update({ sections: getSections(container, opts) })
+          update()
         }
       }, 1)
     }
@@ -130,18 +128,20 @@ function getScroll (container) {
   }
 }
 
-function getSections (container, opts) {
-  var cHeight = container.scrollHeight
-  var cBounds = container.getBoundingClientRect()
-  return opts.sections(container).map((section) => {
+function getSections (content, map, opts) {
+  var cHeight = content.scrollHeight
+  var mHeight = map.parentElement.clientHeight
+  var cBounds = content.getBoundingClientRect()
+  var scrollTop = content.scrollTop
+  return opts.sections(content).map((section) => {
     var bounds = section.getBoundingClientRect()
-    var top = (((bounds.top - cBounds.top + container.scrollTop) / cHeight) * 100) + '%'
-    var bottom = ((1 - (bounds.bottom - cBounds.top + container.scrollTop) / cHeight) * 100) + '%'
+    var top = (bounds.top - cBounds.top + scrollTop) / cHeight
+    var bottom = (bounds.bottom - cBounds.top + scrollTop) / cHeight
     return {
       scrollTo,
-      top: top,
-      bottom: applyPadding(bottom, opts.paddingBottom),
-      title: opts.title(section)
+      top: top * 100 + '%',
+      bottom: applyPadding((1 - bottom) * 100 + '%', opts.paddingBottom),
+      title: opts.title(section, (mHeight * bottom) - mHeight * top)
     }
   })
 }

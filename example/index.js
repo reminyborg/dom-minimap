@@ -3,7 +3,11 @@ const lorem = require('lorem-ipsum')
 const randomInt = require('random-int')
 const minimap = require('../')
 
-const map = minimap({ paddingBottom: '2px' })
+function getTitle (section, size) {
+    if(size > 15) { return section.getAttribute('data-section-title')}
+}
+
+const map = minimap({ paddingBottom: '2px', title: getTitle })
 const width = 90
 
 var el = view()

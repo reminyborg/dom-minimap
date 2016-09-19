@@ -44,7 +44,7 @@ minimap()
 {
   content: 'minimap-content' // id of element containing sections, or the element directly
   sections: 'minimap-section' // css class used for finding sections, or a function (containerElm) => return Array(sections)
-  title: 'data-section-title' // element attr containing section title, or a function (sectionElm) => return title
+  title: 'data-section-title' // element attr containing section title, or a function (sectionElm, px-size) => return title
   paddingBottom: 0 // because sometimes you need more then 0.0001 px between sections, put <value>px or <value>%
 }
 ```
