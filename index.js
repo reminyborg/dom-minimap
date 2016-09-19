@@ -100,7 +100,7 @@ function minimap (opts) {
   
   function scrollTo () {
     var top = this.style.top.slice(0, -1)
-    if (top) container.scrollTop = container.scrollHeight * top / 100
+    if (top) container.scrollTop = Math.round(container.scrollHeight * top / 100)
   }
   
   function renderMap (state) {
