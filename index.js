@@ -50,6 +50,11 @@ function minimap (opts) {
     var titleName = opts.title
     opts.title = (section) => section.getAttribute(titleName)
   }
+  opts.tooltip = opts.tooltip || 'data-section-tooltip'
+  if (typeof opts.hover !== 'function') {
+    var tooltipName = opts.tooltip
+    opts.tooltip = (section) => section.getAttribute(tooltipName)
+  }
   opts.content = opts.content || 'minimap-content'
 
   var lastContainerHeight
@@ -106,7 +111,7 @@ function minimap (opts) {
     if (state.sections) {
       content = state.sections.map((section) => {
         return yo`
-          <div class="dom-minimap-section unselectable" onclick=${scrollTo} style="top:${section.top};bottom:${section.bottom}">${section.title}</div>
+          <div class="dom-minimap-section unselectable" title=${section.tooltip} onclick=${scrollTo} style="top:${section.top};bottom:${section.bottom}">${section.title}</div>
         `
       }).concat([
         yo`<div class="dom-minimap-scroll" style="bottom:${state.scroll.topFromBottom}"></div>`,
@@ -141,7 +146,8 @@ function getSections (content, map, opts) {
       scrollTo,
       top: top * 100 + '%',
       bottom: applyPadding((1 - bottom) * 100 + '%', opts.paddingBottom),
-      title: opts.title(section, (mHeight * bottom) - mHeight * top)
+      title: opts.title(section, (mHeight * bottom) - mHeight * top),
+      tooltip: opts.tooltip(section)
     }
   })
 }
