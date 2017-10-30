@@ -56,6 +56,9 @@ function minimap (opts) {
     opts.tooltip = (section) => section.getAttribute(tooltipName)
   }
   opts.content = opts.content || 'minimap-content'
+  opts.mapStyle = typeof opts.mapStyle !== 'undefined' ? opts.mapStyle : 'height: 100;'
+  opts.sectionStyle = opts.sectionStyle || ''
+  opts.clickOffset = opts.clickOffset || 0
 
   var lastContainerHeight
   var container
@@ -71,7 +74,7 @@ function minimap (opts) {
     // update on scroll event
     container.addEventListener('scroll', debounce(update, opts.scrollThrottle, { maxWait: opts.scrollThrottle }))
     // update on window resize event
-    window.addEventListener('resize', debounce(update),100)
+    window.addEventListener('resize', debounce(update), 100)
     // update on element loaded
     update()
   }, null, minimap)
@@ -81,9 +84,9 @@ function minimap (opts) {
   })
 
   function update () {
-    var newState = Object.assign({}, state, { 
-        sections: getSections(container, element, opts),
-        scroll: getScroll(container)
+    var newState = Object.assign({}, state, {
+      sections: getSections(container, element, opts),
+      scroll: getScroll(container)
     })
     render(newState, state)
     state = newState
@@ -100,25 +103,29 @@ function minimap (opts) {
 
     return element
   }
-  
+
   function scrollTo () {
     var top = this.style.top.slice(0, -1)
-    if (top) container.scrollTop = Math.round(container.scrollHeight * top / 100)
+    if (top) container.scrollTop = Math.round((container.scrollHeight * top) / 100) + opts.clickOffset
   }
-  
+
   function renderMap (state) {
     var content = yo`<div style="margin-top:20px;text-align:center">loading</div>`
     if (state.sections) {
       content = state.sections.map((section) => {
         return yo`
-          <div class="dom-minimap-section unselectable" title=${section.tooltip} onclick=${scrollTo} style="top:${section.top};bottom:${section.bottom}">${section.title}</div>
+          <div class="dom-minimap-section unselectable"
+            title=${section.tooltip} onclick=${scrollTo}
+            style="top:${section.top};bottom:${section.bottom};${opts.sectionStyle}">
+            ${section.title}
+          </div>
         `
       }).concat([
         yo`<div class="dom-minimap-scroll" style="bottom:${state.scroll.topFromBottom}"></div>`,
         yo`<div class="dom-minimap-scroll" style="top:${state.scroll.bottomFromTop}"></div>`
       ])
     }
-    yo.update(element, yo`<div style='position:relative;height:100%'>${content}</div>`)
+    yo.update(element, yo`<div style='position:relative;${opts.mapStyle}'>${content}</div>`)
   }
 }
 
@@ -143,7 +150,6 @@ function getSections (content, map, opts) {
     var top = (bounds.top - cBounds.top + scrollTop) / cHeight
     var bottom = (bounds.bottom - cBounds.top + scrollTop) / cHeight
     return {
-      scrollTo,
       top: top * 100 + '%',
       bottom: applyPadding((1 - bottom) * 100 + '%', opts.paddingBottom),
       title: opts.title(section, (mHeight * bottom) - mHeight * top),
