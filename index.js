@@ -84,13 +84,18 @@ function minimap (opts) {
 
   function scrollUpdate () {
     state.scroll = getScroll(container)
-    element.querySelector('.dom-minimap-scroll-top').style.bottom = state.scroll.topFromBottom
-    element.querySelector('.dom-minimap-scroll-bottom').style.top = state.scroll.bottomFromTop
+    var top = element.querySelector('.dom-minimap-scroll-top')
+    var bottom = element.querySelector('.dom-minimap-scroll-bottom')
+    if (!top || !bottom) return
+    top.style.bottom = state.scroll.topFromBottom
+    bottom.style.top = state.scroll.bottomFromTop
   }
 
   function update () {
+    var sections = getSections(container, element, opts)
+    if (!sections) return
     var newState = Object.assign({}, state, {
-      sections: getSections(container, element, opts),
+      sections: sections,
       scroll: getScroll(container)
     })
     render(newState, state)
@@ -148,6 +153,7 @@ function getScroll (container) {
 }
 
 function getSections (content, map, opts) {
+  if (!map.parentElement) return false
   var cHeight = content.scrollHeight
   var mHeight = map.parentElement.clientHeight
   var cBounds = content.getBoundingClientRect()
