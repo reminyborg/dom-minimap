@@ -2,14 +2,16 @@
   "name": "dom-minimap",
   "version": "1.7.3",
   "description": "simply lovely dom minimap",
-  "main": "index.js",
+  "main": "es5.js",
   "source": "index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
     "start": "budo example/index.js --live",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx babel index.js --presets @babel/preset-env -o es5.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,9 @@
   },
   "homepage": "https://github.com/reminyborg/dom-minimap#readme",
   "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
+    "@babel/preset-env": "^7.1.5",
     "budo": "^9.1.0",
     "standard": "^8.0.0"
   },
