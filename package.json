@@ -3,6 +3,7 @@
   "version": "1.7.2",
   "description": "simply lovely dom minimap",
   "main": "index.js",
+  "source": "index.js",
   "directories": {
     "example": "example"
   },
