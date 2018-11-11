@@ -1,6 +1,6 @@
 {
   "name": "dom-minimap",
-  "version": "1.7.3",
+  "version": "1.7.4",
   "description": "simply lovely dom minimap",
   "main": "es5.js",
   "source": "index.js",
